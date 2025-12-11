@@ -104,6 +104,7 @@ jobs:
         fi
     
     - name: Publish self-contained executable
+      shell: bash
       run: |
         dotnet publish src/ClipX.CLI/ClipX.CLI.csproj \
           --configuration Release \
