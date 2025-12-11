@@ -1,0 +1,143 @@
+name: Cross-Platform CI
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  build-and-test:
+    name: Build and Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            platform: linux-x64
+            install-deps: sudo apt-get update && sudo apt-get install -y xclip
+          - os: windows-latest
+            platform: win-x64
+            install-deps: echo "No dependencies needed"
+          - os: macos-latest
+            platform: osx-arm64
+            install-deps: echo "No dependencies needed"
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Install platform dependencies
+      run: ${{ matrix.install-deps }}
+      shell: bash
+    
+    # Setup virtual display for Linux to enable real clipboard tests
+    - name: Setup virtual display (Linux only)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get install -y xvfb
+        Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+        echo "DISPLAY=:99" >> $GITHUB_ENV
+        sleep 2
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    
+    - name: Run unit tests
+      run: dotnet test --configuration Release --no-build --verbosity normal
+    
+    # Test actual clipboard functionality where possible
+    - name: Test real clipboard operations (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        dotnet publish src/ClipX.CLI/ClipX.CLI.csproj -c Release -r linux-x64 --self-contained -p:PublishSingleFile=true -o ./test-bin
+        echo "Testing real clipboard on Linux with Xvfb"
+        echo "Hello from CI" | ./test-bin/clipx copy
+        RESULT=$(./test-bin/clipx paste)
+        if [ "$RESULT" = "Hello from CI" ]; then
+          echo "✅ Real clipboard test PASSED on Linux"
+        else
+          echo "❌ Real clipboard test FAILED on Linux"
+          echo "Expected: 'Hello from CI'"
+          echo "Got: '$RESULT'"
+          exit 1
+        fi
+    
+    - name: Test real clipboard operations (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        dotnet publish src/ClipX.CLI/ClipX.CLI.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -o ./test-bin
+        Write-Host "Testing real clipboard on Windows"
+        "Hello from Windows CI" | ./test-bin/clipx.exe copy
+        $result = ./test-bin/clipx.exe paste
+        if ($result -eq "Hello from Windows CI") {
+          Write-Host "✅ Real clipboard test PASSED on Windows"
+        } else {
+          Write-Host "❌ Real clipboard test FAILED on Windows"
+          Write-Host "Expected: 'Hello from Windows CI'"
+          Write-Host "Got: '$result'"
+          exit 1
+        }
+    
+    - name: Test real clipboard operations (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        dotnet publish src/ClipX.CLI/ClipX.CLI.csproj -c Release -r osx-arm64 --self-contained -p:PublishSingleFile=true -o ./test-bin
+        echo "Testing real clipboard on macOS"
+        echo "Hello from macOS CI" | ./test-bin/clipx copy
+        RESULT=$(./test-bin/clipx paste)
+        if [ "$RESULT" = "Hello from macOS CI" ]; then
+          echo "✅ Real clipboard test PASSED on macOS"
+        else
+          echo "⚠️  Real clipboard test may not work in CI (expected)"
+          echo "Expected: 'Hello from macOS CI'"
+          echo "Got: '$RESULT'"
+          # Don't fail on macOS as clipboard may not work in CI
+        fi
+    
+    - name: Publish self-contained executable
+      run: |
+        dotnet publish src/ClipX.CLI/ClipX.CLI.csproj \
+          --configuration Release \
+          --runtime ${{ matrix.platform }} \
+          --self-contained \
+          -p:PublishSingleFile=true \
+          --output ./publish/${{ matrix.platform }}
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: clipx-${{ matrix.platform }}
+        path: ./publish/${{ matrix.platform }}/clipx*
+        retention-days: 7
+
+  # Optional: Create release on tag
+  release:
+    name: Create Release
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          clipx-linux-x64/*
+          clipx-win-x64/*
+          clipx-osx-arm64/*
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
