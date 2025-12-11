@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipX.Platform", "src\ClipX
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipX.CLI", "src\ClipX.CLI\ClipX.CLI.csproj", "{C3D4E5F6-3333-4444-5555-666666666666}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipX.Server", "src\ClipX.Server\ClipX.Server.csproj", "{D4E5F6G7-4444-5555-6666-777777777777}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipX.Core.Tests", "tests\ClipX.Core.Tests\ClipX.Core.Tests.csproj", "{E5F6G7H8-5555-6666-7777-888888888888}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipX.Platform.Tests", "tests\ClipX.Platform.Tests\ClipX.Platform.Tests.csproj", "{F6G7H8I9-6666-7777-8888-999999999999}"
