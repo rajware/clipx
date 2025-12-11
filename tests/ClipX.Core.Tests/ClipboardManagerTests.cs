@@ -5,14 +5,53 @@ using Xunit;
 
 namespace ClipX.Core.Tests;
 
-public class ClipboardManagerTests
+public class ClipboardManagerTests : IDisposable
 {
+    private readonly string _testDirectory;
+
+    public ClipboardManagerTests()
+    {
+        // Create a unique temporary directory for each test run
+        _testDirectory = Path.Combine(Path.GetTempPath(), $"clipx-test-{Guid.NewGuid()}");
+        Directory.CreateDirectory(_testDirectory);
+    }
+
+    public void Dispose()
+    {
+        // Clean up test directory after each test
+        if (Directory.Exists(_testDirectory))
+        {
+            try
+            {
+                Directory.Delete(_testDirectory, recursive: true);
+            }
+            catch
+            {
+                // Ignore cleanup errors
+            }
+        }
+    }
+
+    private HistoryManager CreateTestHistoryManager()
+    {
+        var mockFileSystem = new Mock<IFileSystemProvider>();
+        mockFileSystem.Setup(f => f.GetDataDirectory()).Returns(_testDirectory);
+        mockFileSystem.Setup(f => f.GetConfigDirectory()).Returns(_testDirectory);
+        mockFileSystem.Setup(f => f.EnsureDirectoryExists(It.IsAny<string>()))
+            .Callback<string>(dir => Directory.CreateDirectory(dir));
+        
+        var storage = new StorageManager(mockFileSystem.Object);
+        var config = new ConfigurationManager(mockFileSystem.Object);
+        
+        return new HistoryManager(storage, config);
+    }
+
     [Fact]
     public async Task CopyFromStdin_WithValidInput_ReturnsTrue()
     {
         // Arrange
         var mockClipboard = new Mock<IClipboardProvider>();
-        var historyManager = new HistoryManager();
+        var historyManager = CreateTestHistoryManager();
         var manager = new ClipboardManager(mockClipboard.Object, historyManager, "test-platform");
 
         var testInput = "Test clipboard content";
@@ -44,7 +83,7 @@ public class ClipboardManagerTests
         var testContent = "Clipboard content";
         mockClipboard.Setup(c => c.GetTextAsync()).ReturnsAsync(testContent);
 
-        var historyManager = new HistoryManager();
+        var historyManager = CreateTestHistoryManager();
         var manager = new ClipboardManager(mockClipboard.Object, historyManager, "test-platform");
 
         var originalOut = Console.Out;
@@ -74,7 +113,7 @@ public class ClipboardManagerTests
         var mockClipboard = new Mock<IClipboardProvider>();
         mockClipboard.Setup(c => c.GetTextAsync()).ReturnsAsync(string.Empty);
 
-        var historyManager = new HistoryManager();
+        var historyManager = CreateTestHistoryManager();
         var manager = new ClipboardManager(mockClipboard.Object, historyManager, "test-platform");
 
         var originalErr = Console.Error;
