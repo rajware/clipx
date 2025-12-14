@@ -1,0 +1,68 @@
+.TH CLIPX-CLEAR 1 "December 2024" "ClipX 0.2.0" "User Commands"
+.SH NAME
+clipx-clear \- clear clipboard history
+.SH SYNOPSIS
+.B clipx clear
+.B \-\-all
+.RI [ \-\-force ]
+.br
+.B clipx clear
+.BI \-\-before " DATE"
+.RI [ \-\-force ]
+.SH DESCRIPTION
+The
+.B clipx clear
+command removes entries from clipboard history. By default, it prompts
+for confirmation before clearing.
+.SH OPTIONS
+.TP
+.B \-\-all
+Clear all clipboard history entries.
+.TP
+.BI \-\-before " DATE"
+Clear entries created before the specified date.
+Date format: YYYY-MM-DD
+.TP
+.B \-\-force
+Skip confirmation prompt and clear immediately.
+.SH EXAMPLES
+.TP
+Clear all history (with confirmation):
+.nf
+clipx clear --all
+.fi
+.TP
+Clear all history (no confirmation):
+.nf
+clipx clear --all --force
+.fi
+.TP
+Clear entries before a specific date:
+.nf
+clipx clear --before 2024-12-01
+.fi
+.TP
+Clear old entries without confirmation:
+.nf
+clipx clear --before 2024-11-01 --force
+.fi
+.SH CONFIRMATION
+Unless
+.B \-\-force
+is specified, the command will prompt:
+.PP
+.nf
+Clear all clipboard history? (y/N):
+.fi
+.PP
+Type 'y' or 'Y' to confirm, or any other key to cancel.
+.SH EXIT STATUS
+.TP
+.B 0
+Success (or cancelled by user)
+.TP
+.B 1
+Failure (invalid arguments)
+.SH SEE ALSO
+.BR clipx (1),
+.BR clipx-history (1)

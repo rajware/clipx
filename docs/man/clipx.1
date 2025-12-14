@@ -1,0 +1,159 @@
+.TH CLIPX 1 "December 2024" "ClipX 0.2.0" "User Commands"
+.SH NAME
+clipx \- cross-platform clipboard manager with history
+.SH SYNOPSIS
+.B clipx
+.I command
+.RI [ options ]
+.br
+.B clipx
+.BR \-h | \-\-help
+.br
+.B clipx
+.BR \-v | \-\-version
+.SH DESCRIPTION
+.B clipx
+is a cross-platform clipboard manager that provides clipboard history management
+with persistent storage. It allows you to copy text to the clipboard, paste from
+the clipboard, view your clipboard history, and restore previous clipboard entries.
+.PP
+ClipX stores clipboard history in a platform-appropriate location and maintains
+up to 25 entries by default, automatically removing the oldest entries when the
+limit is reached (round-robin).
+.SH COMMANDS
+.TP
+.B copy
+Copy text from standard input to the clipboard.
+See
+.BR clipx-copy (1)
+for details.
+.TP
+.B paste
+Paste text from the clipboard to standard output.
+See
+.BR clipx-paste (1)
+for details.
+.TP
+.B history
+View clipboard history entries.
+See
+.BR clipx-history (1)
+for details.
+.TP
+.B restore
+Restore a previous clipboard entry to the clipboard.
+See
+.BR clipx-restore (1)
+for details.
+.TP
+.B clear
+Clear clipboard history.
+See
+.BR clipx-clear (1)
+for details.
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Display help information and exit.
+.TP
+.BR \-v ", " \-\-version
+Display version information and exit.
+.SH EXAMPLES
+.TP
+Copy text to clipboard:
+.nf
+echo "Hello, World!" | clipx copy
+cat file.txt | clipx copy
+.fi
+.TP
+Paste from clipboard:
+.nf
+clipx paste
+clipx paste > output.txt
+.fi
+.TP
+View clipboard history:
+.nf
+clipx history
+clipx history --limit 5
+.fi
+.TP
+Restore from history:
+.nf
+clipx restore 1
+clipx restore a3f8b2c4
+.fi
+.TP
+Clear history:
+.nf
+clipx clear --all
+clipx clear --before 2024-12-01
+.fi
+.SH FILES
+.TP
+.I ~/.local/share/clipx/clipboard-history.jsonl
+Clipboard history storage (Linux)
+.TP
+.I ~/.config/clipx/config.json
+Configuration file (Linux)
+.TP
+.I ~/Library/Application Support/ClipX/
+Data and configuration directory (macOS)
+.TP
+.I %LOCALAPPDATA%\\ClipX\\
+Data and configuration directory (Windows)
+.SH ENVIRONMENT
+.B clipx
+respects the following environment variables on Linux:
+.TP
+.B XDG_DATA_HOME
+Override default data directory (~/.local/share)
+.TP
+.B XDG_CONFIG_HOME
+Override default config directory (~/.config)
+.SH EXIT STATUS
+.TP
+.B 0
+Success
+.TP
+.B 1
+Failure (e.g., empty clipboard, invalid arguments)
+.SH DEPENDENCIES
+.SS Linux
+Requires either
+.B xclip
+(for X11) or
+.B wl-clipboard
+(for Wayland):
+.PP
+.nf
+sudo apt install xclip          # Debian/Ubuntu (X11)
+sudo apt install wl-clipboard   # Debian/Ubuntu (Wayland)
+sudo dnf install xclip          # Fedora (X11)
+sudo dnf install wl-clipboard   # Fedora (Wayland)
+.fi
+.SS macOS
+Uses built-in
+.B pbcopy
+and
+.BR pbpaste .
+No additional dependencies required.
+.SS Windows
+Uses Windows clipboard API via .NET.
+No additional dependencies required.
+.SH SEE ALSO
+.BR clipx-copy (1),
+.BR clipx-paste (1),
+.BR clipx-history (1),
+.BR clipx-restore (1),
+.BR clipx-clear (1)
+.PP
+Online documentation:
+.UR https://github.com/rajware/clipx
+.UE
+.SH AUTHOR
+Rajware Services Pvt. Ltd.
+.SH COPYRIGHT
+Copyright \(co 2024 Rajware Services Pvt. Ltd.
+.br
+Licensed under the MIT License.

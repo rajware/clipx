@@ -1,0 +1,52 @@
+#compdef clipx
+
+# Zsh completion for clipx
+# Install to /usr/share/zsh/site-functions/ or ~/.zsh/completions/
+
+_clipx() {
+    local -a commands
+    commands=(
+        'copy:Copy text from stdin to clipboard'
+        'paste:Paste text from clipboard to stdout'
+        'history:View clipboard history'
+        'restore:Restore entry from history to clipboard'
+        'clear:Clear clipboard history'
+    )
+    
+    local -a global_opts
+    global_opts=(
+        '(- *)'{-h,--help}'[Show help information]'
+        '(- *)'{-v,--version}'[Show version information]'
+    )
+    
+    _arguments -C \
+        $global_opts \
+        '1: :->command' \
+        '*:: :->args'
+    
+    case $state in
+        command)
+            _describe 'command' commands
+            ;;
+        args)
+            case $words[1] in
+                history)
+                    _arguments \
+                        '--limit[Maximum number of entries to show]:limit:(5 10 25 50 0)'
+                    ;;
+                restore)
+                    _arguments \
+                        '1:entry id or position:(1 2 3 4 5)'
+                    ;;
+                clear)
+                    _arguments \
+                        '--all[Clear all history]' \
+                        '--before[Clear entries before date]:date:' \
+                        '--force[Skip confirmation prompt]'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_clipx "$@"

@@ -1,0 +1,51 @@
+# Bash completion for clipx
+# Install to /etc/bash_completion.d/ or ~/.local/share/bash-completion/completions/
+
+_clipx_completion() {
+    local cur prev commands
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    
+    commands="copy paste history restore clear --help --version"
+    
+    case "${COMP_CWORD}" in
+        1)
+            # Complete main commands
+            COMPREPLY=($(compgen -W "${commands}" -- "${cur}"))
+            ;;
+        2)
+            # Complete options for specific commands
+            case "${prev}" in
+                history)
+                    COMPREPLY=($(compgen -W "--limit" -- "${cur}"))
+                    ;;
+                restore)
+                    # Could complete with history IDs, but that requires querying clipx
+                    # For now, just show help
+                    COMPREPLY=($(compgen -W "1 2 3" -- "${cur}"))
+                    ;;
+                clear)
+                    COMPREPLY=($(compgen -W "--all --before --force" -- "${cur}"))
+                    ;;
+            esac
+            ;;
+        3)
+            # Complete option values
+            case "${COMP_WORDS[1]}" in
+                clear)
+                    case "${prev}" in
+                        --before)
+                            # Suggest date format
+                            COMPREPLY=($(compgen -W "$(date +%Y-%m-%d)" -- "${cur}"))
+                            ;;
+                    esac
+                    ;;
+            esac
+            ;;
+    esac
+    
+    return 0
+}
+
+complete -F _clipx_completion clipx

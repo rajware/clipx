@@ -1,0 +1,55 @@
+.TH CLIPX-RESTORE 1 "December 2024" "ClipX 0.2.0" "User Commands"
+.SH NAME
+clipx-restore \- restore entry from clipboard history
+.SH SYNOPSIS
+.B clipx restore
+.I id
+.SH DESCRIPTION
+The
+.B clipx restore
+command restores a previous clipboard entry to the current clipboard.
+The entry can be specified by its ID (full or short form) or by its position
+in the history (1 = most recent).
+.SH ARGUMENTS
+.TP
+.I id
+Entry identifier. Can be:
+.RS
+.IP \(bu 2
+Position number (1 = most recent, 2 = second most recent, etc.)
+.IP \(bu 2
+Full entry ID (GUID)
+.IP \(bu 2
+Short entry ID (first 8 characters)
+.RE
+.SH EXAMPLES
+.TP
+Restore most recent entry:
+.nf
+clipx restore 1
+.fi
+.TP
+Restore second most recent entry:
+.nf
+clipx restore 2
+.fi
+.TP
+Restore by short ID:
+.nf
+clipx restore a3f8b2c4
+.fi
+.TP
+Restore by full ID:
+.nf
+clipx restore a3f8b2c4-1234-5678-90ab-cdef12345678
+.fi
+.SH EXIT STATUS
+.TP
+.B 0
+Success
+.TP
+.B 1
+Failure (entry not found)
+.SH SEE ALSO
+.BR clipx (1),
+.BR clipx-history (1)

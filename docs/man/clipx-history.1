@@ -1,0 +1,54 @@
+.TH CLIPX-HISTORY 1 "December 2024" "ClipX 0.2.0" "User Commands"
+.SH NAME
+clipx-history \- view clipboard history
+.SH SYNOPSIS
+.B clipx history
+.RI [ \-\-limit
+.IR N ]
+.SH DESCRIPTION
+The
+.B clipx history
+command displays clipboard history entries in reverse chronological order
+(most recent first). Each entry shows a short ID, timestamp, and content preview.
+.SH OPTIONS
+.TP
+.BI \-\-limit " N"
+Maximum number of entries to display. Use 0 to display all entries.
+Default is 10.
+.SH EXAMPLES
+.TP
+View last 10 entries (default):
+.nf
+clipx history
+.fi
+.TP
+View last 5 entries:
+.nf
+clipx history --limit 5
+.fi
+.TP
+View all entries:
+.nf
+clipx history --limit 0
+.fi
+.SH OUTPUT FORMAT
+Each entry is displayed with:
+.IP \(bu 2
+Short ID (first 8 characters of the full ID)
+.IP \(bu 2
+Timestamp in local time (YYYY-MM-DD HH:MM:SS)
+.IP \(bu 2
+Content preview (truncated to 60 characters if longer)
+.IP \(bu 2
+Separator line (---)
+.SH EXIT STATUS
+.TP
+.B 0
+Success
+.TP
+.B 1
+Failure
+.SH SEE ALSO
+.BR clipx (1),
+.BR clipx-restore (1),
+.BR clipx-clear (1)

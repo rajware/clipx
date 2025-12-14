@@ -92,12 +92,12 @@ The executable will be at: `./publish/linux-x64/clipx`
 ### For All Target Platforms
 
 **Windows (amd64)**:
-```bash
-dotnet publish src/ClipX.CLI/ClipX.CLI.csproj \
-  -c Release \
-  -r win-x64 \
-  --self-contained \
-  -p:PublishSingleFile=true \
+```powershell
+dotnet publish src/ClipX.CLI/ClipX.CLI.csproj `
+  -c Release `
+  -r win-x64 `
+  --self-contained `
+  -p:PublishSingleFile=true `
   -o ./publish/win-x64
 ```
 
