@@ -28,7 +28,4 @@ ClipX, the cross-platform clipboard manager, consists of two components:
   * Pasting text read from the clipboard to stdout
   * Saving text read from the clipboard to a named file
   * Maintaining a round-robin history of clipboard contents
-  * Syncing this history to a storage service
-* ClipX.server: this is a server application that allows:
-  * users to log in securely
-  * syncing clipboard history to and from the server
+  * Maintaining a round-robin history of clipboard contents

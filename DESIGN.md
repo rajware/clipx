@@ -75,13 +75,11 @@ Each platform has different APIs and behaviors for clipboard access:
 ```mermaid
 graph TD
     CLI[ClipX CLI] --> Core[Core Library]
-    Server[ClipX.Server] --> Core
     Core --> Platform[Platform Abstraction Layer]
     Platform --> WinImpl[Windows Implementation]
     Platform --> MacImpl[macOS Implementation]
     Platform --> LinuxImpl[Linux Implementation]
     Core --> Storage[Storage Layer]
-    Core --> Sync[Sync Engine]
 ```
 
 ### 3.2 Layered Architecture
@@ -113,7 +111,6 @@ graph TD
 
 **Components**:
 - `ClipX.CLI` - Command-line interface
-- `ClipX.Server` - Sync server (future)
 
 ### 3.3 Data Flow
 
@@ -201,22 +198,7 @@ clipx clear --before "2024-01-01"
 - Clear all or filtered history entries
 - Require confirmation for destructive operations
 
-### 4.3 Stage 3: Sync Functionality
 
-#### Sync to server
-```bash
-clipx sync --login
-clipx sync --push
-clipx sync --pull
-clipx sync --auto
-```
-
-**Behavior**:
-- Authenticate with ClipX.Server
-- Push/pull clipboard history
-- Enable automatic background sync
-
----
 
 ## 5. Data Models
 
@@ -241,10 +223,6 @@ public class ClipXConfiguration
 {
     public int MaxHistorySize { get; set; } = 100;
     public string StoragePath { get; set; }
-    public bool EnableSync { get; set; } = false;
-    public string SyncServerUrl { get; set; }
-    public bool AutoSync { get; set; } = false;
-    public int AutoSyncIntervalSeconds { get; set; } = 300;
 }
 ```
 
@@ -319,10 +297,7 @@ public class ClipXConfiguration
   - Secure file permissions on history files
   - Option to exclude sensitive data from history
 
-### 8.2 Sync Server
-- **Authentication**: OAuth 2.0 or API key-based
-- **Transport**: HTTPS/TLS only
-- **Data**: End-to-end encryption for synced clipboard data
+
 
 ### 8.3 Platform-Specific
 - **macOS**: Request clipboard access permissions appropriately
@@ -350,12 +325,7 @@ public class ClipXConfiguration
 - [ ] Configuration management
 - [ ] Enhanced testing
 
-### Phase 3: Sync (Stage 3)
-- [ ] ClipX.Server design and implementation
-- [ ] Authentication system
-- [ ] Sync engine
-- [ ] CLI sync commands
-- [ ] End-to-end testing
+
 
 ### Phase 4: Polish
 - [ ] Performance optimization

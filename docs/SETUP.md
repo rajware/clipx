@@ -145,7 +145,6 @@ clipx/
 │   ├── ClipX.Core/          # Platform-agnostic core library
 │   ├── ClipX.Platform/      # Platform-specific implementations
 │   ├── ClipX.CLI/           # Command-line interface
-│   └── ClipX.Server/        # Server (future)
 ├── tests/
 │   ├── ClipX.Core.Tests/
 │   ├── ClipX.Platform.Tests/
@@ -174,4 +173,4 @@ Ensure no other application is blocking clipboard access. Try running as adminis
 ## Next Steps
 
 - **Stage 2**: Implement clipboard history management
-- **Stage 3**: Implement sync functionality with ClipX.Server
+- **Stage 2**: Implement clipboard history management
