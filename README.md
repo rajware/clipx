@@ -1,6 +1,6 @@
 # ClipX
 
-[![Test Suite](https://github.com/rajware/clipx/actions/workflows/ci.yml/badge.svg)](https://github.com/rajware/clipx/actions/workflows/ci.yml)
+[![Test Suite](https://github.com/rajware/clipx/actions/workflows/test.yml/badge.svg)](https://github.com/rajware/clipx/actions/workflows/test.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/rajware/clipx?include_prereleases)](https://github.com/rajware/clipx/releases)
 [![License](https://img.shields.io/github/license/rajware/clipx)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-8.0-512bd4)](https://dotnet.microsoft.com/)
