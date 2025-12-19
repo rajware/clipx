@@ -46,7 +46,10 @@ jobs:
         if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
           VER="${{ github.event.inputs.version }}"
         else
-          VER="${GITHUB_REF#refs/tags/v}"
+          # Strip refs/tags/ prefix
+          VER="${GITHUB_REF#refs/tags/}"
+          # Strip leading 'v' if present
+          VER="${VER#v}"
         fi
         echo "VERSION=$VER" >> $GITHUB_ENV
         echo "version=$VER" >> $GITHUB_OUTPUT
