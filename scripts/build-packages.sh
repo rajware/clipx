@@ -23,6 +23,7 @@ dotnet publish src/ClipX.CLI/ClipX.CLI.csproj \
   -p:PublishSingleFile=true \
   -p:Version=${VERSION} \
   -o ./publish/linux-x64
+cp ./publish/linux-x64/clipx ./publish/linux-x64/clipx-linux-x64
 
 echo "Building macOS x64..."
 dotnet publish src/ClipX.CLI/ClipX.CLI.csproj \
@@ -32,6 +33,7 @@ dotnet publish src/ClipX.CLI/ClipX.CLI.csproj \
   -p:PublishSingleFile=true \
   -p:Version=${VERSION} \
   -o ./publish/osx-x64
+cp ./publish/osx-x64/clipx ./publish/osx-x64/clipx-osx-x64
 
 echo "Building macOS ARM64..."
 dotnet publish src/ClipX.CLI/ClipX.CLI.csproj \
@@ -41,8 +43,10 @@ dotnet publish src/ClipX.CLI/ClipX.CLI.csproj \
   -p:PublishSingleFile=true \
   -p:Version=${VERSION} \
   -o ./publish/osx-arm64
+cp ./publish/osx-arm64/clipx ./publish/osx-arm64/clipx-osx-arm64
 
 echo "Building Windows x64..."
+
 dotnet publish src/ClipX.CLI/ClipX.CLI.csproj \
   -c Release \
   -r win-x64 \
@@ -50,6 +54,7 @@ dotnet publish src/ClipX.CLI/ClipX.CLI.csproj \
   -p:PublishSingleFile=true \
   -p:Version=${VERSION} \
   -o ./publish/win-x64
+cp ./publish/win-x64/clipx.exe ./publish/win-x64/clipx-win-x64.exe
 
 echo ""
 echo "==> Creating macOS tarballs..."

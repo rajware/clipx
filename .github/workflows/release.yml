@@ -70,6 +70,10 @@ jobs:
           dist/packages/*.apk
           dist/packages/*.zst
           dist/homebrew/Formula/clipx.rb
+          publish/linux-x64/clipx-linux-x64
+          publish/osx-x64/clipx-osx-x64
+          publish/osx-arm64/clipx-osx-arm64
+          publish/win-x64/clipx-win-x64.exe
         draft: true
         prerelease: false
         body: |
@@ -88,7 +92,7 @@ jobs:
           ```bash
           brew install <url-to-clipx.rb>
           ``` 
-          (See `dist/homebrew/Formula/clipx.rb` attached for the exact formula for this release)
+          (See `clipx.rb` attached for the exact formula for this release)
           
           ### Linux
           Download the appropriate package for your distribution (`.deb`, `.rpm`, `.apk`, or `.pkg.tar.zst`).

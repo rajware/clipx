@@ -1,4 +1,4 @@
-name: Cross-Platform CI
+name: Cross-Platform Testing
 
 on:
   workflow_dispatch:  # Manual trigger only

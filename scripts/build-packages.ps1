@@ -45,10 +45,10 @@ Write-Host "==> Building binaries..."
 Write-Host ""
 
 $Platforms = @(
-    @{ Name="Linux x64"; Rid="linux-x64" },
-    @{ Name="macOS x64"; Rid="osx-x64" },
-    @{ Name="macOS ARM64"; Rid="osx-arm64" },
-    @{ Name="Windows x64"; Rid="win-x64" }
+    @{ Name="Linux x64"; Rid="linux-x64"; Extension="" },
+    @{ Name="macOS x64"; Rid="osx-x64"; Extension="" },
+    @{ Name="macOS ARM64"; Rid="osx-arm64"; Extension="" },
+    @{ Name="Windows x64"; Rid="win-x64"; Extension=".exe" }
 )
 
 foreach ($p in $Platforms) {
@@ -62,6 +62,7 @@ foreach ($p in $Platforms) {
         -p:PublishSingleFile=true `
         -p:Version=$Version `
         -o $OutputDir
+    Copy-Item -Path (Join-Path $OutputDir "clipx$($p.Extension)") -Destination (Join-Path $OutputDir "clipx-$($p.Rid)$($p.Extension)") -ErrorAction SilentlyContinue
 }
 
 Write-Host ""
