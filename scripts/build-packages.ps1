@@ -11,10 +11,15 @@ It requires:
 - nfpm (optional, for Linux packages)
 #>
 
+
+param(
+    [string]$Version = "0.0.0-dev"
+)
+
 $ErrorActionPreference = "Stop"
 
-$Version = "0.2.0"
 Write-Host "Building ClipX v$Version packages..."
+
 Write-Host ""
 
 $ScriptDir = $PSScriptRoot

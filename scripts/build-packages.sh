@@ -4,7 +4,7 @@
 
 set -e
 
-VERSION="0.2.0"
+VERSION="${1:-0.0.0-dev}"
 echo "Building ClipX v${VERSION} packages..."
 echo ""
 

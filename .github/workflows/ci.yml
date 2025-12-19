@@ -103,42 +103,5 @@ jobs:
           # Don't fail on macOS as clipboard may not work in CI
         fi
     
-    - name: Publish self-contained executable
-      shell: bash
-      run: |
-        dotnet publish src/ClipX.CLI/ClipX.CLI.csproj \
-          --configuration Release \
-          --runtime ${{ matrix.platform }} \
-          --self-contained \
-          -p:PublishSingleFile=true \
-          --output ./publish/${{ matrix.platform }}
     
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: clipx-${{ matrix.platform }}
-        path: ./publish/${{ matrix.platform }}/clipx*
-        retention-days: 7
-
-  # Optional: Create release on tag
-  release:
-    name: Create Release
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-    
-    steps:
-    - name: Download all artifacts
-      uses: actions/download-artifact@v4
-    
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: |
-          clipx-linux-x64/*
-          clipx-win-x64/*
-          clipx-osx-arm64/*
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Release job removed. See release.yml
