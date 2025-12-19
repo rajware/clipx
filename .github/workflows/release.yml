@@ -41,12 +41,15 @@ jobs:
         sudo apt-get install -y nsis
         
     - name: Extract Version
+      id: get_version
       run: |
         if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          VER="${{ github.event.inputs.version }}"
         else
-          echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+          VER="${GITHUB_REF#refs/tags/v}"
         fi
+        echo "VERSION=$VER" >> $GITHUB_ENV
+        echo "version=$VER" >> $GITHUB_OUTPUT
       
     - name: Build Packages
       run: |
@@ -70,7 +73,7 @@ jobs:
         draft: true
         prerelease: false
         body: |
-          # ClipX v${{ env.VERSION }}
+          # ClipX v${{ steps.get_version.outputs.version }}
           
           ## Key Features
           - Cross-platform clipboard manager
@@ -79,7 +82,7 @@ jobs:
           ## Installation
           
           ### Windows
-          Download `clipx-setup-${{ env.VERSION }}.exe` and run it.
+          Download `clipx-setup-${{ steps.get_version.outputs.version }}.exe` and run it.
           
           ### macOS (Homebrew)
           ```bash
