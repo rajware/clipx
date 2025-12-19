@@ -148,25 +148,12 @@ Write-Host "Calculating checksums..."
     }
 
 
-# Windows Installer
-Write-Host ""
-Write-Host "==> Building Windows installer with NSIS..."
-if (Test-Command "makensis") {
-    try {
-        & "$RootDir\packaging\nsis\build.ps1"
-    }
-    catch {
-        Write-Error "Failed to build Windows installer: $_"
-    }
-}
-else {
-    Write-Warning "NSIS (makensis) not found. Skipping Windows installer. Install from https://nsis.sourceforge.io/"
-}
-
 # Linux Packages (nfpm)
 Write-Host ""
 if (Test-Command "nfpm") {
     Write-Host "==> Building Linux packages with nfpm..."
+    
+    $env:VERSION = $Version
     $Packagers = "deb", "rpm", "apk", "archlinux"
     foreach ($packager in $Packagers) {
         Write-Host "Building $packager package..."
@@ -174,9 +161,25 @@ if (Test-Command "nfpm") {
         $TargetDir = Join-Path $DistDir "packages"
         nfpm pkg --packager $packager --config $ConfigPath --target $TargetDir
     }
+    $env:VERSION = $null
 }
 else {
     Write-Warning "nfpm not found. Skipping Linux packages. (Use 'go install github.com/goreleaser/nfpm/v2/cmd/nfpm@latest' to install)"
+}
+
+# Windows Installer
+Write-Host ""
+Write-Host "==> Building Windows installer with NSIS..."
+if (Test-Command "makensis") {
+    try {
+        & "$RootDir\packaging\nsis\build.ps1" -Version $Version
+    }
+    catch {
+        Write-Error "Failed to build Windows installer: $_"
+    }
+}
+else {
+    Write-Warning "NSIS (makensis) not found. Skipping Windows installer. Install from https://nsis.sourceforge.io/"
 }
 
 Write-Host ""

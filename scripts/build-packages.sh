@@ -116,6 +116,8 @@ if command -v nfpm >/dev/null 2>&1; then
     echo "==> Building Linux packages with nfpm..."
     echo ""
     
+
+    export VERSION
     for packager in deb rpm apk archlinux; do
         echo "Building ${packager} package..."
         nfpm pkg --packager ${packager} --config packaging/nfpm/nfpm.yaml --target dist/packages/
@@ -130,7 +132,8 @@ if command -v makensis >/dev/null 2>&1; then
     echo ""
     echo "==> Building Windows installer with NSIS..."
     echo ""
-    ./packaging/nsis/build.sh
+    ./packaging/nsis/build.sh "${VERSION}"
+
 else
     echo ""
     echo "Warning: NSIS (makensis) not found. Skipping Windows installer."

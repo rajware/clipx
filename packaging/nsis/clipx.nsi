@@ -2,7 +2,9 @@
 ; Creates a Windows installer for ClipX
 
 !define PRODUCT_NAME "ClipX"
-!define PRODUCT_VERSION "0.2.0"
+!ifndef PRODUCT_VERSION
+  !define PRODUCT_VERSION "0.0.0-dev"
+!endif
 !define PRODUCT_PUBLISHER "Rajware Services Pvt. Ltd."
 !define PRODUCT_WEB_SITE "https://github.com/rajware/clipx"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"

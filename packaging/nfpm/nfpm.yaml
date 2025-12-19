@@ -4,7 +4,7 @@
 name: "clipx"
 arch: "amd64"
 platform: "linux"
-version: "v0.2.0"
+version: "${VERSION}"
 section: "utils"
 priority: "optional"
 maintainer: "Rajware Services Pvt. Ltd. <contact@rajware.com>"
