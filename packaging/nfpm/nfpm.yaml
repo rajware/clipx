@@ -1,0 +1,102 @@
+# nfpm configuration for ClipX
+# Creates DEB, RPM, APK, and Arch packages from a single config
+
+name: "clipx"
+arch: "amd64"
+platform: "linux"
+version: "v0.2.0"
+section: "utils"
+priority: "optional"
+maintainer: "Rajware Services Pvt. Ltd. <contact@rajware.com>"
+description: |
+  ClipX - Cross-platform clipboard manager with history
+  
+  ClipX provides clipboard history management with persistent storage.
+  It allows you to copy text to the clipboard, paste from the clipboard,
+  view your clipboard history, and restore previous clipboard entries.
+homepage: "https://github.com/rajware/clipx"
+license: "MIT"
+
+# Dependencies
+depends:
+  # DEB/RPM dependencies
+  - xclip | wl-clipboard
+
+# Contents to include in the package
+contents:
+  # Binary
+  - src: ./publish/linux-x64/clipx
+    dst: /usr/local/bin/clipx
+    file_info:
+      mode: 0755
+  
+  # Man pages
+  - src: ./docs/man/clipx.1
+    dst: /usr/local/share/man/man1/clipx.1
+    file_info:
+      mode: 0644
+  
+  - src: ./docs/man/clipx-history.1
+    dst: /usr/local/share/man/man1/clipx-history.1
+    file_info:
+      mode: 0644
+  
+  - src: ./docs/man/clipx-restore.1
+    dst: /usr/local/share/man/man1/clipx-restore.1
+    file_info:
+      mode: 0644
+  
+  - src: ./docs/man/clipx-clear.1
+    dst: /usr/local/share/man/man1/clipx-clear.1
+    file_info:
+      mode: 0644
+  
+  # Bash completion
+  - src: ./completions/bash/clipx
+    dst: /etc/bash_completion.d/clipx
+    file_info:
+      mode: 0644
+  
+  # Zsh completion
+  - src: ./completions/zsh/_clipx
+    dst: /usr/local/share/zsh/site-functions/_clipx
+    file_info:
+      mode: 0644
+  
+  # Fish completion
+  - src: ./completions/fish/clipx.fish
+    dst: /usr/local/share/fish/vendor_completions.d/clipx.fish
+    file_info:
+      mode: 0644
+  
+  # Documentation
+  - src: ./README.md
+    dst: /usr/local/share/doc/clipx/README.md
+    file_info:
+      mode: 0644
+  
+  - src: ./LICENSE
+    dst: /usr/local/share/doc/clipx/LICENSE
+    file_info:
+      mode: 0644
+
+# Scripts
+scripts:
+  postinstall: ./packaging/nfpm/scripts/postinstall.sh
+  preremove: ./packaging/nfpm/scripts/preremove.sh
+
+# RPM specific
+rpm:
+  group: Applications/System
+  summary: Cross-platform clipboard manager with history
+  compression: lzma
+
+# DEB specific
+deb:
+  fields:
+    Bugs: https://github.com/rajware/clipx/issues
+
+# APK specific
+apk:
+  signature:
+    key_file: ""  # Leave empty for unsigned packages
